@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="leaflet/leaflet.css" />
+		<script src="leaflet/leaflet-src.js"></script>
+		<script src="../Leaflet-custom-markers.js"></script>
+		<script src="http://code.jquery.com/jquery-1.11.2.min.js"></script>
+  <html>
+  <head>
+
+  <style>
+    html,
+    body,
+    #map {
+      padding: 0;
+      margin: 0;
+      width: 100%;
+      height: 100%;
+    }
+  </style>
+</head>
+<body>
+  <div id="map"></div>
+  <script type="text/javascript">
+    var map = L.map('map').setView([50.840044461254,4.3792577763402], 13);
+
+
+    var features = [{
+            "geometry": {
+                "coordinates": [
+                    4.3758315338684,
+                    50.818123112655
+                ],
+                "type": "Point"
+            },
+            "id": "Featureaf1824a3dbbcc67e7aacaf50f2b27e2e",
+            "properties": {
+                "type":"pin",
+                "text": "Le Maelbeek naissait dans l'enclos de l'Abbaye de La Cambre. La \u00ab\u00a0mare aux canards\u00a0\u00bb de l'Abbaye est aujourd'hui encore aliment\u00e9e par une de ses sources. Cependant, il est certain que le ruisseau recevait l'eau de plusieurs sources jaillissant des vallons forestiers au c\u0153ur desquels, vers 1200, Dame Gis\u00e8le, fonda l'abbaye. Le site, en ces temps-l\u00e0 fort isol\u00e9, \u00e9tait alors situ\u00e9 en For\u00eat de Soignes, laquelle \u00e9tait bien plus \u00e9tendue qu'aujourd'hui - elle couvrait une bonne partie de la r\u00e9gion entourant Bruxelles."
+            },
+            "type": "Feature"
+        },
+        {
+            "geometry": {
+                "coordinates": [
+                    4.3792577763402,
+                    50.840044461254
+                ],
+                "type": "Point"
+            },
+            "id": "Feature0d8abd44a18f3f3c409192711aa80781",
+            "properties": {
+                "type":"square",
+                "text": "Hello from square"
+            },
+            "type": "Feature"
+        },
+        {
+            "geometry": {
+                "coordinates": [
+                    4.3732124118139,
+                    50.855693478694
+                ],
+                "type": "Point"
+            },
+            "id": "Feature25c515346f06f40e2e28d5155cfd3f3c",
+            "properties": {
+                "type":"pin",
+                "text": "Nothing to say"
+            },
+            "type": "Feature"
+        }];
+
+
+    var background = new L.TileLayer('http://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png', {
+        attribution : '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
+	      opacity: 1,
+	      maxZoom: 18
+	  }).addTo(map);
+
+    // Add vector data to map
+    geojsonLayer = L.geoJson(false, {
+      style: function(feature) {
+          switch (feature.properties.type){
+            case 'pin':
+              return {
+                weight: 1,
+                color: '#000',
+                fillOpacity: 1,
+                strokeOpacity: 0.5,
+                fillColor: '#cb4b16'
+              };
+              break;
+            case 'square':
+              return {
+                opacity: 0.8,
+                weight: 3,
+                color: 'white',
+                fillOpacity: 1,
+                strokeOpacity: 0.5,
+                fillColor: 'blue',
+                lineJoin:"round"
+              };
+              break;
+            case 'circle':
+              return {weight: 0,fillOpacity:1,fillColor:'#FF0000'};
+              break;
+            default:
+              return {weight: 2,color: 'white',fillOpacity:0.5,fillColor:'#000000'};
+              break;
+          }
+        
+      },
+      pointToLayer: function (feature, latlng) {
+          switch (feature.properties.type){
+            case 'pin':
+              return new L.CustomMarker(latlng);
+              break;
+            case 'square':
+              //M150 0 L75 200 L225 200 Z
+              return new L.CustomMarker(latlng,{anchor:[-20,-40],points:[[0,0],[0,30],[15,36],[20,40],[25,36],[40,30],[40,0]]});
+              break;
+            case 'circle':
+              return new L.CircleMarker(latlng);
+              break;
+            default:
+              return new L.CustomMarker(latlng);
+              break;
+          }
+      },
+      onEachFeature: function(feature, layer) {
+        layer.on({
+          click: layer.bindPopup(feature.properties.text),
+          mouseover: function(e) { if(feature.properties.text){ e.target.setStyle({opacity:1,weight: 4});  }  },
+          mouseout: function(e) { if(feature.properties.text){ geojsonLayer.resetStyle(e.target);  }  }
+        });
+      }
+    }).addTo(map);
+
+    $.getJSON("data.json", function(json) {
+        geojsonLayer.addData(json); // this will show the info it in firebug console
+        geojsonLayer.addData(features); // this will show the info it in firebug console
+    });
+  </script>
+</body>
+</html>
