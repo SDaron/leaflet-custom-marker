@@ -7,6 +7,8 @@
 
 (function() {
 
+
+
   L.CustomMarker = L.Path.extend({
 
 	  options: {

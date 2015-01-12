@@ -6,6 +6,7 @@
     <link rel="stylesheet" href="leaflet/leaflet.css" />
 		<script src="leaflet/leaflet-src.js"></script>
 		<script src="../Leaflet-custom-markers.js"></script>
+		<script src="../Leaflet-my-custom-marker.js"></script>
 		<script src="http://code.jquery.com/jquery-1.11.2.min.js"></script>
   <html>
   <head>
@@ -45,8 +46,8 @@
         {
             "geometry": {
                 "coordinates": [
-                    4.3792577763402,
-                    50.840044461254
+                    4.35,
+                    50.84
                 ],
                 "type": "Point"
             },
@@ -120,7 +121,7 @@
               break;
             case 'square':
               //M150 0 L75 200 L225 200 Z
-              return new L.CustomMarker(latlng,{anchor:[-20,-40],points:[[0,0],[0,30],[15,36],[20,40],[25,36],[40,30],[40,0]]});
+              return new L.MyCustomMarker(latlng);
               break;
             case 'circle':
               return new L.CircleMarker(latlng);
